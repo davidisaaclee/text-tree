@@ -29,7 +29,7 @@ TextTree = Polymer
     return result
 
   _touchDownHole: (evt, detail) ->
-    evt.stopPropagation()
+    # evt.stopPropagation()
 
     path = evt.model.item.path
 
