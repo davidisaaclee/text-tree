@@ -37,7 +37,7 @@ Polymer
     Polymer.dom(hole).appendChild newInnerTree
 
   _fillRequested: (event, detail) ->
-    # event.stopPropagation()
+    event.stopPropagation()
 
     @fire 'requested-fill',
       path: detail.path
