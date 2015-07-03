@@ -37,3 +37,4 @@ TextTree = Polymer
 
     @fire 'request-fill',
       path: path
+      sender: this
