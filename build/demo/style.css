@@ -6,7 +6,6 @@ body {
   background: -o-radial-gradient(center, ellipse cover, #db8787 0%, #cb3434 100%);
   background: -ms-radial-gradient(center, ellipse cover, #db8787 0%, #cb3434 100%);
   background: radial-gradient(ellipse at center, #db8787 0%, #cb3434 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#db8787', endColorstr='#c12a2a', GradientType=1 );
   width: 100vw;
   height: 100vh; }
 

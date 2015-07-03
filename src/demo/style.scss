@@ -6,7 +6,7 @@ body {
   background: -o-radial-gradient(center, ellipse cover, rgba(219,135,135,1) 0%, rgba(203,52,52,1) 100%);
   background: -ms-radial-gradient(center, ellipse cover, rgba(219,135,135,1) 0%, rgba(203,52,52,1) 100%);
   background: radial-gradient(ellipse at center, rgba(219,135,135,1) 0%, rgba(203,52,52,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#db8787', endColorstr='#c12a2a', GradientType=1 );
+  // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#db8787', endColorstr='#c12a2a', GradientType=1 );
   width: 100vw;
   height: 100vh;
 }
@@ -38,7 +38,7 @@ body {
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.2);
 
-  // white-space: pre-wrap;
+  // white-space: pre;
   tab-size: 2em;
   font-family: 'Source Code Pro', monospace;
   color: #333;

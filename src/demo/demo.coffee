@@ -115,4 +115,5 @@ document
 document
   .querySelector '#tree'
   .addEventListener 'requested-fill', (evt) ->
+    console.log 'requested-fill'
     evt.detail.tree.fillHole evt.detail.path, simplerTree
