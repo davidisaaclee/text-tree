@@ -1,8 +1,10 @@
 Polymer
   is: 'text-root'
 
-  listeners:
+  listeners: {
     'request-fill': '_fillRequested'
+    # 'down': '_handleDown'
+  }
 
   rootNode: () -> this.$['root'].querySelector '.node'
 
@@ -39,6 +41,10 @@ Polymer
   _fillRequested: (event, detail) ->
     event.stopPropagation()
 
+    console.log 'requested-fill', event
+
     @fire 'requested-fill',
       path: detail.path
       tree: this
+
+  # _handleDown: (event, detail) -> console.log event.target

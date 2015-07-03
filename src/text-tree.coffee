@@ -31,6 +31,8 @@ TextTree = Polymer
   _touchDownHole: (evt, detail) ->
     evt.stopPropagation()
 
+    console.log '_touchDownHole', evt
+
     path = evt.model.item.path
 
     @fire 'request-fill',
