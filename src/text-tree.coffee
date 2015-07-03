@@ -31,7 +31,7 @@ TextTree = Polymer
   _touchDownHole: (evt, detail) ->
     evt.stopPropagation()
 
-    console.log '_touchDownHole', evt
+    console.log 'firing _touchDownHole', evt
 
     path = evt.model.item.path
 

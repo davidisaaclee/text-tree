@@ -41,7 +41,7 @@ Polymer
   _fillRequested: (event, detail) ->
     event.stopPropagation()
 
-    console.log 'requested-fill', event
+    console.log 'firing requested-fill', event
 
     @fire 'requested-fill',
       path: detail.path
