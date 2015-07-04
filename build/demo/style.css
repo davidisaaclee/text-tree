@@ -33,3 +33,6 @@ body {
 .empty:after {
   content: '_';
   visibility: hidden; }
+
+.selected > .node {
+  border: 1px #888 solid; }

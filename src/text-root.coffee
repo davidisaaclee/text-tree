@@ -6,7 +6,30 @@ Polymer
     # 'down': '_handleDown'
   }
 
+  selected: null
+
   rootNode: () -> this.$['root'].querySelector '.node'
+
+  select: (path) ->
+    if @selected?
+      @unselect @selected
+    selectedElm = this.$.root.walk path,
+      endFn: (elm) ->
+        Polymer.dom(elm).classList.add 'selected'
+        return elm
+      fold:
+        proc: (acc, elm) -> Polymer.dom(elm).classList.add 'selected'
+
+    if selectedElm? then @selected = path
+
+    return selectedElm
+
+  unselect: (path) ->
+    this.$.root.walk path,
+      endFn: (elm) ->
+        Polymer.dom(elm).classList.remove 'selected'
+      fold:
+        proc: (acc, elm) -> Polymer.dom(elm).classList.remove 'selected'
 
   navigateTo: (path) ->
     helper = (currentHole, [hd, tl...]) =>
@@ -40,8 +63,6 @@ Polymer
 
   _fillRequested: (event, detail) ->
     event.stopPropagation()
-
-    console.log 'firing requested-fill', event
 
     @fire 'requested-fill',
       path: detail.path
