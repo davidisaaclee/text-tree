@@ -16,6 +16,7 @@ TextTree = Polymer
     holes = Polymer.dom(branchNode)?.childNodes.filter (elm) -> elm.classList?.contains 'hole'
     return if holes? then holes[index]?.querySelector 'text-tree' else null
 
+  # TODO: abort fold procedures if child does not exist?
   walk: (path, options) ->
     [hd, tl...] = path
     nextChild = @getChild hd
@@ -37,28 +38,33 @@ TextTree = Polymer
   _isEqual: (a, b) -> a is b
 
   _createBranchElements: (model) ->
-    template = model.template
-    path = if model.path? then model.path else []
-    children = if model.children? then model.children else []
+    if model.type is 'empty'
+      type: 'empty'
+      path: if model.path? then model.path else []
+    else
+      template = model.template
+      path = if model.path? then model.path else []
+      children = if model.children? then model.children else []
 
-    result = parseTemplate template
-    holes = result.filter (elm) -> elm.type is 'hole'
+      result = parseTemplate template
+      holes = result.filter (elm) -> elm.type is 'hole'
 
-    while children.length < holes.length
-      children.push {type: 'empty'}
+      while children.length < holes.length
+        children.push {type: 'empty'}
 
-    holes.forEach (elm, idx) ->
-        elm['value'] = children[idx]
-        elm['path'] = [path..., idx]
-        elm['value']['path'] = [path..., idx]
-    return result
+      holes.forEach (elm, idx) ->
+          elm.value = children[idx]
+          elm.path = [path..., idx]
+          elm.value.path = [path..., idx]
+
+      return result
 
   _touchDownHole: (evt, detail) ->
-    evt.stopPropagation()
+    # quick-fixing this to stop extraneous mousedown trigger
+    if evt.type is 'down'
+      evt.stopPropagation()
 
-    path = evt.model.item.path
-
-    console.log 'firing _touchDownHole', evt
-    @fire 'request-fill',
-      path: path
-      sender: this
+      path = evt.model.item.path
+      @fire 'request-fill',
+        path: path
+        sender: this
