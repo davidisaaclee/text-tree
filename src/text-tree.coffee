@@ -39,8 +39,7 @@ TextTree = Polymer
 
   _createBranchElements: (model) ->
     if model.type is 'empty'
-      type: 'empty'
-      path: if model.path? then model.path else []
+      [{type: 'empty', path: if model.path? then model.path else []}]
     else
       template = model.template
       path = if model.path? then model.path else []
