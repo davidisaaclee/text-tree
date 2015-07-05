@@ -1,19 +1,19 @@
 window.addEventListener 'WebComponentsReady', () ->
   tree =
     type: 'branch'
-    template: "(prog \n\t_)"
+    template: "(prog \n\t`program`)"
     children: [
       type: 'branch'
-      template: "(if _ \n\t_ \n\t_)"
+      template: "(if `cond` \n\t`then` \n\t`else`)"
       children: [
         type: 'branch'
         template: 'true'
        ,
         type: 'branch'
-        template: '(arith \n\t_ \n\t_ \n\t_)'
+        template: '(arith \n\t`rator` \n\t`randl` \n\t`randr`)'
         children: [
           type: 'branch'
-          template: "(arith _ _ _)"
+          template: "(arith `rator` `randl` `randr`)"
           children: [
             type: 'branch'
             template: '+'
@@ -27,7 +27,7 @@ window.addEventListener 'WebComponentsReady', () ->
           template: '1'
          ,
           type: 'branch'
-          template: '(arith _ _ _)'
+          template: '(arith `rator` `randl` `randr`)'
           children: [
             type: 'empty'
            ,
@@ -38,7 +38,7 @@ window.addEventListener 'WebComponentsReady', () ->
         ]
        ,
         type: 'branch'
-        template: '(foo _ _)'
+        template: '(foo `a` `b`)'
         children: [
           type: 'branch'
           template: 'argument'
@@ -99,7 +99,7 @@ window.addEventListener 'WebComponentsReady', () ->
 
   simpleTree =
     type: 'branch'
-    template: '(branch _)'
+    template: '(branch `arg`)'
     children: [
       type: 'branch'
       template: "i'm leaf"
@@ -111,12 +111,14 @@ window.addEventListener 'WebComponentsReady', () ->
 
   document
     .querySelector '#tree'
-    .treeModel = treeSansWs
+    .treeModel = tree
 
   document
     .querySelector '#tree'
     .addEventListener 'requested-fill', (evt) ->
-      evt.detail.tree.fillHole evt.detail.path, simplerTree
+      evt.detail.tree.select evt.detail.path, true
 
 
-  setTimeout () -> document.querySelector('#tree').select [0, 1, 1]
+  setTimeout () ->
+    console.log 'selecting'
+    console.log document.querySelector('#tree').navigate ['program', 'cond'], true

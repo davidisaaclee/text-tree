@@ -1,7 +1,8 @@
 ### text-tree
 ###
 
-parseTemplate = (require 'template-parser').parse
+# parseTemplate = (require 'template-parser').parse
+parseTemplate = (require 'grammar_parser').parse
 
 TextTree = Polymer
   is: 'text-tree'
@@ -9,17 +10,34 @@ TextTree = Polymer
   properties:
     treeModel: Object
 
-  navigate: (path) -> @walk path, {endFn: (x) -> x}
+  navigate: (path, useNumericPath) ->
+    @walk path,
+      endFn: (x) -> x
+      useNumericPath: useNumericPath
 
-  getChild: (index) ->
+  getNthChild: (index) ->
     branchNode = Polymer.dom(this.root).querySelector('.branch')
     holes = Polymer.dom(branchNode)?.childNodes.filter (elm) -> elm.classList?.contains 'hole'
     return if holes? then holes[index]?.querySelector 'text-tree' else null
 
+  getChild: (id) ->
+    branchNode = Polymer.dom(this.root).querySelector('.branch')
+    holes =
+      Polymer.dom(branchNode)
+        .children
+        .filter ((elm) -> (elm.getAttribute 'holeId') is id)
+    return if holes? then holes[0]?.querySelector 'text-tree' else null
+
   # TODO: abort fold procedures if child does not exist?
   walk: (path, options) ->
     [hd, tl...] = path
-    nextChild = @getChild hd
+
+    nextChild = do =>
+      if options.useNumericPath
+      then @getNthChild hd
+      else @getChild hd
+
+    console.log 'taking step ', hd, 'from ', @, ' to ', nextChild
 
     # Return `null` if no element at that path.
     if not nextChild?
@@ -34,6 +52,7 @@ TextTree = Polymer
       else nextChild
     else
       nextChild.walk tl, options
+
 
   _isEqual: (a, b) -> a is b
 
@@ -52,9 +71,9 @@ TextTree = Polymer
         children.push {type: 'empty'}
 
       holes.forEach (elm, idx) ->
-          elm.value = children[idx]
-          elm.path = [path..., idx]
-          elm.value.path = [path..., idx]
+        elm.value = children[idx]
+        elm.path = [path..., idx]
+        elm.value.path = [path..., idx]
 
       return result
 

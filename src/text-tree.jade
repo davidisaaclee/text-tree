@@ -16,7 +16,7 @@ dom-module#text-tree
           template(is="dom-if", if="{{_isEqual(item.type, 'literal')}}")
             span.literal {{item.text}}
           template(is="dom-if", if="{{_isEqual(item.type, 'hole')}}")
-            span.hole(on-down="_touchDownHole")
+            span.hole(on-down="_touchDownHole", holeId="{{item.identifier}}")
               text-tree(tree-model="{{item.value}}")
 
 script(src="text-tree.js")
