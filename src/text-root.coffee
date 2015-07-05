@@ -17,8 +17,8 @@ Polymer
       endFn: (elm) ->
         Polymer.dom(elm).classList.add 'selected'
         return elm
-      fold:
-        proc: (acc, elm) -> Polymer.dom(elm).classList.add 'selected'
+      # fold:
+      #   proc: (acc, elm) -> Polymer.dom(elm).classList.add 'selected'
       useNumericPath: useNumericPath
 
     if selectedElm? then @selected = arguments
@@ -69,7 +69,9 @@ Polymer
     event.stopPropagation()
 
     @fire 'requested-fill',
-      path: detail.path
+      idPath: detail.idPath
+      numericPath: detail.numericPath
+      nodeModel: detail.nodeModel
       tree: this
 
   # _handleDown: (event, detail) -> console.log event.target

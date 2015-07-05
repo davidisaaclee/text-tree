@@ -116,7 +116,8 @@ window.addEventListener 'WebComponentsReady', () ->
   document
     .querySelector '#tree'
     .addEventListener 'requested-fill', (evt) ->
-      evt.detail.tree.select evt.detail.path, true
+      console.log evt.detail
+      evt.detail.tree.select evt.detail.idPath
 
 
   setTimeout () ->

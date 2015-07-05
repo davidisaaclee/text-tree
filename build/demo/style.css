@@ -35,4 +35,4 @@ body {
   visibility: hidden; }
 
 .selected > .node {
-  border: 1px #888 solid; }
+  background-color: rgba(50, 200, 50, 0.2); }
