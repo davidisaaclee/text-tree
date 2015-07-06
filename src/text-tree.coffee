@@ -42,8 +42,6 @@ TextTree = Polymer
       then @getNthChild hd
       else @getChild hd
 
-    console.log "walk([#{path}], #{options}): from ", this, " to ", nextChild
-
     # Return `null` if no element at that path.
     if not nextChild?
       return null
