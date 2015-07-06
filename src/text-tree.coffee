@@ -106,12 +106,24 @@ TextTree = Polymer
     # (I believe that the extraneous event is being somehow caused by
     #   importing polymer-gestures separately in the non-Polymer portion
     #   of the app.)
-    if evt.type is 'down'
-      evt.stopPropagation()
+    # if evt.type is 'down'
+    #   # stop propagation so that only the deepest node responds
+    #   evt.stopPropagation()
 
-      nodeModel = evt.model.item
-      @fire 'request-fill',
-        idPath: nodeModel.idPath
-        numericPath: nodeModel.numericPath
-        nodeModel: nodeModel
-        sender: this
+    #   nodeModel = evt.model.item
+    #   @fire 'request-fill',
+    #     idPath: nodeModel.idPath
+    #     numericPath: nodeModel.numericPath
+    #     nodeModel: nodeModel
+    #     sender: this
+
+  _touchUpHole: (evt, detail) ->
+    # stop propagation so that only the deepest node responds
+    evt.stopPropagation()
+
+    nodeModel = evt.model.item
+    @fire 'request-fill',
+      idPath: nodeModel.idPath
+      numericPath: nodeModel.numericPath
+      nodeModel: nodeModel
+      sender: this
