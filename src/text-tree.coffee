@@ -116,13 +116,8 @@ TextTree = Polymer
     #     sender: this
 
   _requestFill: (evt, detail) ->
-    if evt.pointerType is 'mouse'
-      do evt.preventTap
-
     # stop propagation so that only the deepest node responds
     evt.stopPropagation()
-
-    console.log 'text-tree:_requestFill', evt
 
     nodeModel = evt.model.item
     @fire 'request-fill',

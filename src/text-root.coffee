@@ -68,8 +68,6 @@ Polymer
   _fillRequested: (event, detail) ->
     event.stopPropagation()
 
-    console.log 'text-root::_fillRequested', event
-
     @fire 'requested-fill',
       idPath: detail.idPath
       numericPath: detail.numericPath
