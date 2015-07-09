@@ -115,9 +115,11 @@ TextTree = Polymer
     #     nodeModel: nodeModel
     #     sender: this
 
-  _touchUpHole: (evt, detail) ->
+  _requestFill: (evt, detail) ->
     # stop propagation so that only the deepest node responds
     evt.stopPropagation()
+
+    console.log 'text-tree:_requestFill', evt
 
     nodeModel = evt.model.item
     @fire 'request-fill',

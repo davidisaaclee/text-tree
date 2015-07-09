@@ -13,7 +13,7 @@
     <template is="dom-if" if="{{_isEqual(treeModel.type, 'branch')}}"><span id="branch" class="node branch">
         <template is="dom-repeat" items="{{_createBranchElements(treeModel)}}">
           <template is="dom-if" if="{{_isEqual(item.type, 'literal')}}"><span class="literal">{{item.text}}</span></template>
-          <template is="dom-if" if="{{_isEqual(item.type, 'hole')}}"><span on-down="_touchDownHole" on-up="_touchUpHole" hole-id="{{item.identifier}}" class="hole">
+          <template is="dom-if" if="{{_isEqual(item.type, 'hole')}}"><span on-down="_requestFill" hole-id="{{item.identifier}}" class="hole">
               <text-tree tree-model="{{item.value}}"></text-tree></span></template>
         </template></span></template>
   </template>
