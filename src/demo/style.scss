@@ -11,16 +11,16 @@ body {
   height: 100vh;
 }
 
-@mixin center-children {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+// @mixin center-children {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+// }
 
-body {
-  @include center-children;
-}
+// body {
+//   @include center-children;
+// }
 
 #container {
   width: 80vw;
@@ -38,10 +38,10 @@ body {
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.2);
 
-  // white-space: pre;
-  tab-size: 2em;
+  white-space: pre;
+  tab-size: 30px;
   font-family: 'Source Code Pro', monospace;
-  color: #333;
+  // color: #333;
 }
 
 .empty:after {

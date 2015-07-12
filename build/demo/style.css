@@ -9,12 +9,6 @@ body {
   width: 100vw;
   height: 100vh; }
 
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; }
-
 #container {
   width: 80vw;
   height: 60vh;
@@ -26,9 +20,9 @@ body {
   padding: 7px 10px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.2);
-  tab-size: 2em;
-  font-family: 'Source Code Pro', monospace;
-  color: #333; }
+  white-space: pre;
+  tab-size: 30px;
+  font-family: 'Source Code Pro', monospace; }
 
 .empty:after {
   content: '_';

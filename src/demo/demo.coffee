@@ -99,13 +99,21 @@ window.addEventListener 'WebComponentsReady', () ->
 
   simpleTree =
     type: 'branch'
+    template: '(branch\n\t`arg`)'
+    children: [
+      type: 'branch'
+      template: "leaf"
+    ]
+
+  simplerTree =
+    type: 'branch'
     template: '(branch `arg`)'
     children: [
       type: 'branch'
       template: "i'm leaf"
     ]
 
-  simplerTree =
+  simplestTree =
     type: 'branch'
     template: "i'm leaf"
 
