@@ -9,7 +9,7 @@
 }
 
 start
-  = (lit / var)*
+  = (lit / hole / var)*
 
 lit
   = text:[^`]+ {
@@ -21,10 +21,20 @@ lit
     };
   };
 
-var
-  = "`" text:([^`]+) "`" {
+hole
+  = "`" text:(([a-z]i / '-')+) "`" {
     return {
       type: "hole",
+      identifier: text.join(""),
+      index: nextIndex('piece'),
+      holeIndex: nextIndex('hole')
+    };
+  };
+
+var
+  = "`" text:(([a-z]i / '-')+) "*`" {
+    return {
+      type: 'variadic',
       identifier: text.join(""),
       index: nextIndex('piece'),
       holeIndex: nextIndex('hole')

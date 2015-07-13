@@ -1,7 +1,7 @@
 ### text-tree
 ###
 
-parseTemplate = (require 'grammar_parser').parse
+parseTemplate = (require 'grammar-parser').parse
 
 TextTree = Polymer
   is: 'text-tree'
@@ -76,26 +76,63 @@ TextTree = Polymer
         idPath: idPath
       }]
     else if model.type is 'branch'
-      template = model.template
       children = if model.children? then model.children else []
 
-      result = parseTemplate template
-      holes = result.filter (elm) -> elm.type is 'hole'
+      template = parseTemplate model.template
 
-      while children.length < holes.length
-        children.push {type: 'empty'}
+      result = []
+      holeCount = 0
+      template.forEach (elm, idx) ->
+        switch elm.type
+          when 'hole'
+            myNumericPath = [numericPath..., holeCount]
+            myIdPath = [idPath..., elm.identifier]
 
-      holes.forEach (elm, idx) ->
-        myNumericPath = [numericPath..., idx]
-        myIdPath = [idPath..., elm.identifier]
-
-        elm.value = children[idx]
-        elm.numericPath = myNumericPath
-        elm.idPath = myIdPath
-        elm.value.numericPath = myNumericPath
-        elm.value.idPath = myIdPath
+            elm.value = children[holeCount]
+            elm.numericPath = myNumericPath
+            elm.idPath = myIdPath
+            elm.value.numericPath = myNumericPath
+            elm.value.idPath = myIdPath
+            result.push elm
+            holeCount++
+          when 'variadic'
+            # eat ALL the children
+            for i in [holeCount...children.length]
+              subhole =
+                type: 'hole'
+                identifier: "#{elm.identifier}-#{i}"
+                index: elm.index + (i - holeCount)
+                holeIndex: holeCount
+              myNumericPath = [numericPath..., i]
+              myIdPath = [idPath..., subhole.identifier]
+              subhole.value = children[i]
+              subhole.numericPath = myNumericPath
+              subhole.idPath = myIdPath
+              subhole.value.numericPath = myNumericPath
+              subhole.value.idPath = myIdPath
+              result.push subhole
+              holeCount++
+          else
+            result.push elm
 
       return result
+
+      # holes = template.filter (elm) -> elm.type is 'hole' or elm.type is 'variadic'
+
+      # while children.length < holes.length
+      #   children.push {type: 'empty'}
+
+      # holes.forEach (elm, idx) ->
+      #   myNumericPath = [numericPath..., idx]
+      #   myIdPath = [idPath..., elm.identifier]
+
+      #   elm.value = children[idx]
+      #   elm.numericPath = myNumericPath
+      #   elm.idPath = myIdPath
+      #   elm.value.numericPath = myNumericPath
+      #   elm.value.idPath = myIdPath
+
+      # return template
     else
       console.log 'Unrecognized node model type: ', model.type
 

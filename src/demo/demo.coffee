@@ -38,8 +38,11 @@ window.addEventListener 'WebComponentsReady', () ->
         ]
        ,
         type: 'branch'
-        template: '(foo `a` `b`)'
+        template: '(list `elm*`)'
         children: [
+          type: 'branch'
+          template: 'argument'
+         ,
           type: 'branch'
           template: 'argument'
          ,
@@ -124,10 +127,4 @@ window.addEventListener 'WebComponentsReady', () ->
   document
     .querySelector '#tree'
     .addEventListener 'requested-fill', (evt) ->
-      console.log evt.detail
       evt.detail.tree.select evt.detail.idPath
-
-
-  setTimeout () ->
-    console.log 'selecting'
-    console.log document.querySelector('#tree').navigate ['program', 'cond'], true
