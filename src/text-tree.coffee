@@ -88,6 +88,7 @@ TextTree = Polymer
           when 'hole'
             myNumericPath = [numericPath..., holeCount]
             myIdPath = [idPath..., elm.identifier]
+            console.log '1: making paths', myNumericPath, myIdPath
 
             elm.value = children[holeCount]
             elm.numericPath = myNumericPath
@@ -106,6 +107,7 @@ TextTree = Polymer
                 holeIndex: holeCount
               myNumericPath = [numericPath..., i]
               myIdPath = [idPath..., subhole.identifier]
+              console.log '2: making paths', myNumericPath, myIdPath
               subhole.value = children[i]
               subhole.numericPath = myNumericPath
               subhole.idPath = myIdPath
