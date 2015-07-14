@@ -117,7 +117,7 @@ TextTree = Polymer
               result.push subhole
               holeCount++
           else
-            result.push elm
+            # do nothing
 
       console.log 'created branch elements:', result
       return result
