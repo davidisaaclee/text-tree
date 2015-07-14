@@ -58,16 +58,14 @@ TextTree = Polymer
       nextChild.walk tl, options
 
 
-  _isEqual: (a, b) ->
-    r = a is b
-    console.log "_isEqual: (#{a}, #{b}) -> #{r}"
-    return r
+  _isEqual: (a, b) -> a is b
 
   _createBranchElements: (model) ->
+    # HACK: There's something really fishy going on here...
+    #       Check out `text-tree.jade` for more info.
     if model is undefined
       console.log '_createBranchElements for undefined!'
       return []
-
     if model.type is 'empty'
       console.log '_createBranchElements for empty!'
       return []

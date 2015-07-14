@@ -9,6 +9,10 @@ dom-module#text-tree
   template
     template(is="dom-if", if="{{_isEqual(treeModel.type, 'empty')}}")
       span.node.empty#empty
+    //- FIXME: Empty `treeModel`s are passing this `dom-if`, resulting in
+    //-   passing empty models to `_createBranchElements`, and `undefined`
+    //-   models to `text-tree` (although this is stopped by the temporary
+    //-   workaround in `_createBranchElements`).
     template(is="dom-if", if="{{_isEqual(treeModel.type, 'branch')}}")
       span.node.branch#branch
         template(is="dom-repeat", items="{{_createBranchElements(treeModel)}}")
