@@ -61,6 +61,7 @@ TextTree = Polymer
   _isEqual: (a, b) -> a is b
 
   _createBranchElements: (model) ->
+    if model is undefined then debugger
     console.log model
     numericPath =
       if model.numericPath?
