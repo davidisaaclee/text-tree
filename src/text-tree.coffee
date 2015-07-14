@@ -9,9 +9,6 @@ TextTree = Polymer
   properties:
     treeModel: Object
 
-  ready: () ->
-    console.log 'text-tree ready with model', @treeModel
-
   navigate: (path, useNumericPath) ->
     @walk path,
       endFn: (x) -> x
@@ -64,8 +61,8 @@ TextTree = Polymer
   _isEqual: (a, b) -> a is b
 
   _createBranchElements: (model) ->
-    if model is undefined then debugger
-    console.log model
+    console.log 'model', model
+    debugger
     numericPath =
       if model.numericPath?
       then model.numericPath
@@ -92,7 +89,6 @@ TextTree = Polymer
           when 'hole'
             myNumericPath = [numericPath..., holeCount]
             myIdPath = [idPath..., elm.identifier]
-            console.log '1: making paths', myNumericPath, myIdPath
 
             elm.value = children[holeCount]
             elm.numericPath = myNumericPath
@@ -111,7 +107,6 @@ TextTree = Polymer
                 holeIndex: holeCount
               myNumericPath = [numericPath..., i]
               myIdPath = [idPath..., subhole.identifier]
-              console.log '2: making paths', myNumericPath, myIdPath
               subhole.value = children[i]
               subhole.numericPath = myNumericPath
               subhole.idPath = myIdPath
@@ -122,7 +117,8 @@ TextTree = Polymer
           else
             result.push elm
 
-      console.log 'values:', result.map (elm) -> if elm.type is 'literal' then 'literal' else elm.value
+      console.log 'result: ', result
+      debugger
       return result
 
       # holes = template.filter (elm) -> elm.type is 'hole' or elm.type is 'variadic'
