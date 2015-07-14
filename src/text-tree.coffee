@@ -61,6 +61,7 @@ TextTree = Polymer
   _isEqual: (a, b) -> a is b
 
   _createBranchElements: (model) ->
+    console.log model
     numericPath =
       if model.numericPath?
       then model.numericPath
