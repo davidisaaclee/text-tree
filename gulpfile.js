@@ -33,8 +33,7 @@ options['jade'] = {
   src: './src/**/*.jade',
   dst: './build',
   options: {
-    // pretty: false
-    pretty: true
+    pretty: false
   }
 };
 

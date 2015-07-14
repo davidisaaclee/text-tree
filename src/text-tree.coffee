@@ -120,10 +120,9 @@ TextTree = Polymer
           else
             result.push elm
 
-      debugger
       return result
 
-      # holes = template.filter (elm) -> elm.type is 'hole' or elm.type is 'variadic'
+      # holes = template.filter (elm) -> elm.type is 'hole'
 
       # while children.length < holes.length
       #   children.push {type: 'empty'}
