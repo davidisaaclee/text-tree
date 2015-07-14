@@ -58,7 +58,9 @@ TextTree = Polymer
       nextChild.walk tl, options
 
 
-  _isEqual: (a, b) -> a is b
+  _isEqual: (a, b) ->
+    console.log "_isEqual #{a}, #{b} = #{a is b}"
+    a is b
 
   _createBranchElements: (model) ->
     console.log 'model', model
