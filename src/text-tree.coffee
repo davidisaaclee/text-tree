@@ -119,7 +119,7 @@ TextTree = Polymer
           else
             result.push elm
 
-      console.log 'created branch elements:', result
+      console.log 'values:', result.map (elm) -> if elm.type is 'literal' then 'literal' else elm.value
       return result
 
       # holes = template.filter (elm) -> elm.type is 'hole' or elm.type is 'variadic'
