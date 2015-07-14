@@ -1,6 +1,8 @@
 ### text-tree
 ###
 
+_ = require 'lodash'
+
 parseTemplate = (require 'grammar-parser').parse
 
 TextTree = Polymer
@@ -66,9 +68,6 @@ TextTree = Polymer
     if model is undefined
       console.log '_createBranchElements for undefined!'
       return []
-    if model.type is 'empty'
-      console.log '_createBranchElements for empty!'
-      return []
 
     numericPath =
       if model.numericPath?
@@ -79,50 +78,55 @@ TextTree = Polymer
       then model.idPath
       else []
     if model.type is 'empty'
-      [{
+      console.log 'empty type'
+      [
         type: 'empty'
         numericPath: numericPath
         idPath: idPath
-      }]
+      ]
     else if model.type is 'branch'
       children = if model.children? then model.children else []
-
       template = parseTemplate model.template
-
       result = []
       holeCount = 0
       template.forEach (elm, idx) ->
         switch elm.type
           when 'hole'
-            myNumericPath = [numericPath..., holeCount]
-            myIdPath = [idPath..., elm.identifier]
+            console.log 'value:', children[holeCount]
 
-            elm.value = children[holeCount]
-            elm.numericPath = myNumericPath
-            elm.idPath = myIdPath
-            elm.value.numericPath = myNumericPath
-            elm.value.idPath = myIdPath
+            pathInfo =
+              numericPath: [numericPath..., holeCount]
+              idPath: [idPath..., elm.identifier]
+
+            _.assign children[holeCount], pathInfo
+            _.assign elm, pathInfo, {value: children[holeCount]}
+
             result.push elm
             holeCount++
           when 'variadic'
             # eat ALL the children
             for i in [holeCount...children.length]
+              console.log 'value:', children[i]
+
               subhole =
                 type: 'hole'
                 identifier: "#{elm.identifier}-#{i}"
                 index: elm.index + (i - holeCount)
                 holeIndex: holeCount
-              myNumericPath = [numericPath..., i]
-              myIdPath = [idPath..., subhole.identifier]
-              subhole.value = children[i]
-              subhole.numericPath = myNumericPath
-              subhole.idPath = myIdPath
-              subhole.value.numericPath = myNumericPath
-              subhole.value.idPath = myIdPath
+
+              pathInfo =
+                numericPath: [numericPath..., i]
+                idPath: [idPath..., subhole.identifier]
+
+              _.assign children[i], pathInfo
+              _.assign subhole, pathInfo, {value: children[i]}
+
               result.push subhole
               holeCount++
-          else
+          when 'literal'
             result.push elm
+          else
+            console.log 'invalid node type', elm.type, elm
 
       return result
 
@@ -145,22 +149,6 @@ TextTree = Polymer
     else
       console.log 'Unrecognized node model type: ', model.type
 
-  _touchDownHole: (evt, detail) ->
-    # HACK: for to stop extraneous mousedown trigger
-    # (I believe that the extraneous event is being somehow caused by
-    #   importing polymer-gestures separately in the non-Polymer portion
-    #   of the app.)
-    # if evt.type is 'down'
-    #   # stop propagation so that only the deepest node responds
-    #   evt.stopPropagation()
-
-    #   nodeModel = evt.model.item
-    #   @fire 'request-fill',
-    #     idPath: nodeModel.idPath
-    #     numericPath: nodeModel.numericPath
-    #     nodeModel: nodeModel
-    #     sender: this
-
   _requestFill: (evt, detail) ->
     # stop propagation so that only the deepest node responds
     evt.stopPropagation()
@@ -171,3 +159,5 @@ TextTree = Polymer
       numericPath: nodeModel.numericPath
       nodeModel: nodeModel
       sender: this
+
+  _doIt: (model) -> _.last model.idPath

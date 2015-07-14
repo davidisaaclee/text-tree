@@ -44,10 +44,14 @@ body {
   // color: #333;
 }
 
-.empty:after {
-  content: '_';
-  visibility: hidden;
+.empty {
+  color: #988;
 }
+
+// .empty:after {
+//   content: '_';
+//   visibility: hidden;
+// }
 
 .selected > .node {
   // border: 1px #888 solid;
