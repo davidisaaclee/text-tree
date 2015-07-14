@@ -9,6 +9,9 @@ TextTree = Polymer
   properties:
     treeModel: Object
 
+  ready: () ->
+    console.log 'text-tree ready with model', @treeModel
+
   navigate: (path, useNumericPath) ->
     @walk path,
       endFn: (x) -> x
