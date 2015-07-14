@@ -59,12 +59,13 @@ TextTree = Polymer
 
 
   _isEqual: (a, b) ->
-    console.log "_isEqual #{a}, #{b} = #{a is b}"
     a is b
 
   _createBranchElements: (model) ->
-    console.log 'model', model
-    debugger
+    if model.type is 'empty'
+      console.log '_createBranchElements for empty!'
+      return []
+
     numericPath =
       if model.numericPath?
       then model.numericPath
@@ -119,7 +120,6 @@ TextTree = Polymer
           else
             result.push elm
 
-      console.log 'result: ', result
       debugger
       return result
 
