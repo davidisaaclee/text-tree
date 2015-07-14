@@ -59,9 +59,15 @@ TextTree = Polymer
 
 
   _isEqual: (a, b) ->
-    a is b
+    r = a is b
+    console.log "_isEqual: (#{a}, #{b}) -> #{r}"
+    return r
 
   _createBranchElements: (model) ->
+    if model is undefined
+      console.log '_createBranchElements for undefined!'
+      return []
+
     if model.type is 'empty'
       console.log '_createBranchElements for empty!'
       return []
