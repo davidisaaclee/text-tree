@@ -17,6 +17,7 @@ window.addEventListener 'WebComponentsReady', () ->
           children: [
             type: 'branch'
             template: '+'
+            classes: 'special-node'
            ,
             type: 'empty'
            ,
@@ -39,6 +40,7 @@ window.addEventListener 'WebComponentsReady', () ->
        ,
         type: 'branch'
         template: '(list `elm*`)'
+        classes: 'special-node'
         children: [
           type: 'branch'
           template: 'argument'

@@ -77,6 +77,7 @@ TextTree = Polymer
       if model.idPath?
       then model.idPath
       else []
+    # FIXME: I don't think this first `if` is ever reached...
     if model.type is 'empty'
       console.log 'empty type'
       [
@@ -92,8 +93,6 @@ TextTree = Polymer
       template.forEach (elm, idx) ->
         switch elm.type
           when 'hole'
-            console.log 'value:', children[holeCount]
-
             pathInfo =
               numericPath: [numericPath..., holeCount]
               idPath: [idPath..., elm.identifier]
@@ -106,8 +105,6 @@ TextTree = Polymer
           when 'variadic'
             # eat ALL the children
             for i in [holeCount...children.length]
-              console.log 'value:', children[i]
-
               subhole =
                 type: 'hole'
                 identifier: "#{elm.identifier}-#{i}"
@@ -160,4 +157,15 @@ TextTree = Polymer
       nodeModel: nodeModel
       sender: this
 
-  _doIt: (model) -> _.last model.idPath
+  _idOfHole: ({idPath}) -> _.last idPath
+
+  _getClassesFromModel: ({classes}) ->
+    if not classes?
+      classes = []
+    if typeof classes is 'string'
+      classes = classes.split ' '
+
+    r = _.toArray arguments
+      .splice 1
+    r.push classes...
+    return r.join ' '

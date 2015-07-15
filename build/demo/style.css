@@ -27,5 +27,8 @@ body {
 .empty {
   color: #988; }
 
+.special-node {
+  border: 2px solid black; }
+
 .selected > .node {
   background-color: rgba(50, 200, 50, 0.2); }
