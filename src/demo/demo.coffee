@@ -1,119 +1,132 @@
-tree =
-  type: 'branch'
-  template: "(prog \n\t_)"
-  children: [
+window.addEventListener 'WebComponentsReady', () ->
+  tree =
     type: 'branch'
-    template: "(if _ \n\t_ \n\t_)"
+    template: "(prog \n\t`program`)"
     children: [
       type: 'branch'
-      template: 'true'
-     ,
-      type: 'branch'
-      template: '(arith \n\t_ \n\t_ \n\t_)'
+      template: "(if `cond` \n\t`then` \n\t`else`)"
       children: [
         type: 'branch'
-        template: "(arith _ _ _)"
+        template: 'true'
+       ,
+        type: 'branch'
+        template: '(arith \n\t`rator` \n\t`randl` \n\t`randr`)'
         children: [
           type: 'branch'
-          template: '+'
+          template: "(arith `rator` `randl` `randr`)"
+          children: [
+            type: 'branch'
+            template: '+'
+            classes: 'special-node'
+           ,
+            type: 'empty'
+           ,
+            type: 'empty'
+          ]
          ,
-          type: 'empty'
+          type: 'branch'
+          template: '1'
          ,
-          type: 'empty'
+          type: 'branch'
+          template: '(arith `rator` `randl` `randr`)'
+          children: [
+            type: 'empty'
+           ,
+            type: 'empty'
+           ,
+            type: 'empty'
+          ]
         ]
        ,
         type: 'branch'
-        template: '1'
+        template: '(list `elm*`)'
+        classes: 'special-node'
+        children: [
+          type: 'branch'
+          template: 'argument'
+         ,
+          type: 'branch'
+          template: 'argument'
+         ,
+          type: 'empty'
+        ]
+      ]
+    ]
+
+  treeSansWs =
+    type: 'branch'
+    template: "(prog _)"
+    children: [
+      type: 'branch'
+      template: "(if _ _ _)"
+      children: [
+        type: 'branch'
+        template: 'true'
        ,
         type: 'branch'
         template: '(arith _ _ _)'
         children: [
-          type: 'empty'
+          type: 'branch'
+          template: "(arith _ _ _)"
+          children: [
+            type: 'branch'
+            template: '+'
+           ,
+            type: 'empty'
+           ,
+            type: 'empty'
+          ]
          ,
-          type: 'empty'
+          type: 'branch'
+          template: '1'
          ,
-          type: 'empty'
+          type: 'branch'
+          template: '(arith _ _ _)'
+          children: [
+            type: 'empty'
+           ,
+            type: 'empty'
+           ,
+            type: 'empty'
+          ]
         ]
-      ]
-     ,
-      type: 'branch'
-      template: '(foo _ _)'
-      children: [
-        type: 'branch'
-        template: 'argument'
        ,
-        type: 'empty'
-      ]
-    ]
-  ]
-
-treeSansWs =
-  type: 'branch'
-  template: "(prog _)"
-  children: [
-    type: 'branch'
-    template: "(if _ _ _)"
-    children: [
-      type: 'branch'
-      template: 'true'
-     ,
-      type: 'branch'
-      template: '(arith _ _ _)'
-      children: [
         type: 'branch'
-        template: "(arith _ _ _)"
+        template: '(foo _ _)'
         children: [
           type: 'branch'
-          template: '+'
-         ,
-          type: 'empty'
-         ,
-          type: 'empty'
-        ]
-       ,
-        type: 'branch'
-        template: '1'
-       ,
-        type: 'branch'
-        template: '(arith _ _ _)'
-        children: [
-          type: 'empty'
-         ,
-          type: 'empty'
+          template: 'argument'
          ,
           type: 'empty'
         ]
-      ]
-     ,
-      type: 'branch'
-      template: '(foo _ _)'
-      children: [
-        type: 'branch'
-        template: 'argument'
-       ,
-        type: 'empty'
       ]
     ]
-  ]
 
-simpleTree =
-  type: 'branch'
-  template: '(branch _)'
-  children: [
+  simpleTree =
+    type: 'branch'
+    template: '(branch\n\t`arg`)'
+    children: [
+      type: 'branch'
+      template: "leaf"
+    ]
+
+  simplerTree =
+    type: 'branch'
+    template: '(branch `arg`)'
+    children: [
+      type: 'branch'
+      template: "i'm leaf"
+    ]
+
+  simplestTree =
     type: 'branch'
     template: "i'm leaf"
-  ]
 
-simplerTree =
-  type: 'branch'
-  template: "i'm leaf"
+  document
+    .querySelector '#tree'
+    .treeModel = tree
 
-document
-  .querySelector '#tree'
-  .treeModel = treeSansWs
-
-document
-  .querySelector '#tree'
-  .addEventListener 'requested-fill', (evt) ->
-    console.log 'requested-fill'
-    evt.detail.tree.fillHole evt.detail.path, simplerTree
+  document
+    .querySelector '#tree'
+    .addEventListener 'requested-fill', (evt) ->
+      evt.detail.tree.select evt.detail.idPath
