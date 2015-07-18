@@ -45,6 +45,7 @@ TextTree = Polymer
       else @getChild hd
 
     console.log 'walking ', hd, 'from', this, 'to', nextChild
+    console.log 'children:', Polymer.dom(Polymer.dom(@root).querySelector '.branch').children
 
     # Return `null` if no element at that path.
     if not nextChild?
