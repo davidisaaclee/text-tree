@@ -13,7 +13,7 @@ TextTree = Polymer
 
   navigate: (path, useNumericPath) ->
     @walk path,
-      endFn: (x) -> x
+      endFn: _.identity
       useNumericPath: useNumericPath
 
   getNthChild: (index) ->
@@ -43,6 +43,8 @@ TextTree = Polymer
       if options.useNumericPath
       then @getNthChild hd
       else @getChild hd
+
+    console.log 'walking ', hd, 'from', this, 'to', nextChild
 
     # Return `null` if no element at that path.
     if not nextChild?
