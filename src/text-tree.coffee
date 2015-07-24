@@ -173,8 +173,7 @@ TextTree = Polymer
     return r.join ' '
 
   _treeModelChanged: (model) ->
-    console.log 'tt model changed'
-    if model.type is 'hole' and model.isFilled
+    if model.type is 'hole'
       if not model.__idPath?
         model.__idPath = [model.id]
       if not model.__numericPath?
