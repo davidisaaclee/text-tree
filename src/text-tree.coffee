@@ -8,6 +8,21 @@ TextTree = Polymer
   is: 'text-tree'
 
   properties:
+    ###
+    TreeModel ::= HoleModel
+                | LiteralModel
+
+    HoleModel ::=
+      type: 'hole'
+      id: String
+      placeholder: String
+      isFilled: Boolean
+      value: [TextTreeModel]
+
+    LiteralModel ::=
+      type: 'literal'
+      value: String
+    ###
     treeModel:
       type: Object
       observer: '_treeModelChanged'
@@ -25,164 +40,122 @@ TextTree = Polymer
         .childNodes
         .filter (elm) -> elm.classList?.contains 'hole'
 
+    # using if-then-else because don't want to return `undefined`
     if holes?
     then holes[index]?.querySelector 'text-tree'
     else null
 
   getChild: (id) ->
-    Polymer.dom(@root)
-      .querySelectorAll '.node'
-      .forEach (node) ->
-        if node.holeId is id
-          console.log node
-          return node.querySelector 'text-tree'
+    console.log 'DEPRECATED: getChild'
+    debugger
+    # r = _.find Polymer.dom(@root).querySelectorAll('.hole'), (node) ->
+    #   console.log node, node.dataset.holeId
+    #   node.dataset.holeId is id
+    # ttNode = r.querySelector 'text-tree'
+    # # HACK: from weird markup structre
+    # result =
+    #   if ttNode?
+    #   then ttNode
+    #   else r
+    # console.log 'getChild', id, @, result
+
+  # children: () ->
+  #   _.chain @treeModel.value
+  #     .filter type: 'hole'
+  #     .map 'id'
+  #     .reduce ((acc, id) => _.extend acc, "#{id}": @getChild id), {}
+  #     .value()
+
 
   # TODO: abort fold procedures if child does not exist?
   walk: (path, options) ->
-    if path.length is 0
-      if options.endFn?
-      then options.endFn this
-      else this
-    else
-      [hd, tl...] = path
+    start =
+      isFilled: true
+      node: this
+    do helper = (current = start, path_ = path) ->
+      if path_.length is 0
+        end = if current.isFilled then current.node else current.container
+        if options.endFn?
+        then options.endFn current.node, current.container, current.id
+        else end
+      else
+        if not current.isFilled
+          # reached a dead end
+          return null
 
-      nextChild = do =>
-        if options.useNumericPath
-        then @getNthChild hd
-        else @getChild hd
+        current = current.node
 
-      # Return `null` if no element at that path.
-      if not nextChild?
-        return null
+        [hd, tl...] = path_
 
-      if options.fold?.proc?
-        options.fold.acc =
-          options.fold.proc options.fold.acc, nextChild
+        # nextChild = do =>
+        #   if options.useNumericPath
+        #   then current.getNthChild hd
+        #   else current.holeElements[hd]
+        nextChild = current.holeElements[hd]
 
-      nextChild.walk tl, options
+        # Return `null` if no element at that path.
+        if not nextChild?
+          return null
 
+        if options.fold?.proc?
+          options.fold.acc =
+            options.fold.proc options.fold.acc, nextChild
 
-  _isEqual: (a, b) -> a is b
-
-  # _createBranchElements: (model) ->
-  #   # HACK: There's something really fishy going on here...
-  #   #       Check out `text-tree.jade` for more info.
-  #   if model is undefined
-  #     console.log '_createBranchElements for undefined!'
-  #     return []
-
-  #   numericPath =
-  #     if model.numericPath?
-  #     then model.numericPath
-  #     else []
-  #   idPath =
-  #     if model.idPath?
-  #     then model.idPath
-  #     else []
-  #   # FIXME: I don't think this first `if` is ever reached...
-  #   if model.type is 'empty'
-  #     [
-  #       type: 'empty'
-  #       numericPath: numericPath
-  #       idPath: idPath
-  #     ]
-  #   else if model.type is 'branch'
-  #     children = if model.children? then model.children else []
-  #     template = parseTemplate model.template
-  #     result = []
-  #     holeCount = 0
-  #     template.forEach (elm, idx) ->
-  #       switch elm.type
-  #         when 'hole'
-  #           pathInfo =
-  #             numericPath: [numericPath..., holeCount]
-  #             idPath: [idPath..., elm.identifier]
-
-  #           _.assign children[holeCount], pathInfo
-  #           _.assign elm, pathInfo, {value: children[holeCount]}
-
-  #           result.push elm
-  #           holeCount++
-  #         when 'variadic'
-  #           # eat ALL the children
-  #           for i in [holeCount...children.length]
-  #             subhole =
-  #               type: 'hole'
-  #               identifier: "#{elm.identifier}-#{i}"
-  #               index: elm.index + (i - holeCount)
-  #               holeIndex: holeCount
-
-  #             pathInfo =
-  #               numericPath: [numericPath..., i]
-  #               idPath: [idPath..., subhole.identifier]
-
-  #             _.assign children[i], pathInfo
-  #             _.assign subhole, pathInfo, {value: children[i]}
-
-  #             result.push subhole
-  #             holeCount++
-  #         when 'literal'
-  #           result.push elm
-  #         else
-  #           console.log 'invalid node type', elm.type, elm
-
-  #     return result
-
-      # holes = template.filter (elm) -> elm.type is 'hole'
-
-      # while children.length < holes.length
-      #   children.push {type: 'empty'}
-
-      # holes.forEach (elm, idx) ->
-      #   myNumericPath = [numericPath..., idx]
-      #   myIdPath = [idPath..., elm.identifier]
-
-      #   elm.value = children[idx]
-      #   elm.numericPath = myNumericPath
-      #   elm.idPath = myIdPath
-      #   elm.value.numericPath = myNumericPath
-      #   elm.value.idPath = myIdPath
-
-      # return template
-    # else
-    #   console.log 'Unrecognized node model type: ', model.type
+        helper nextChild, tl
 
   _requestFill: (evt, detail) ->
-    # stop propagation so that only the deepest node responds
-    evt.stopPropagation()
-
-    # nodeModel = evt.model.item
-    nodeModel = @treeModel
+    do evt.stopPropagation # want only the deepest node to respond
+    nodeModel = evt.model.piece
     @fire 'request-fill',
       idPath: nodeModel.__idPath
       numericPath: nodeModel.__numericPath
       nodeModel: nodeModel
       sender: this
 
-  _idOfHole: ({__idPath}) -> _.last __idPath
+  _calculatePaths: (model, idx) ->
+    if not model.__parentPath?
+      model.__parentPath =
+        idPath: []
+        numericPath: []
+    model.__idPath = [model.__parentPath.idPath..., model.id]
+    model.__numericPath = [model.__parentPath.numericPath..., idx] # TODO: ??
 
-  _getClassesFromModel: ({classes}) ->
-    if not classes?
-      classes = []
-    if typeof classes is 'string'
-      classes = classes.split ' '
-
-    r = _.toArray arguments
-      .splice 1
-    r.push classes...
-    return r.join ' '
+    model.value?.forEach (child) ->
+      child.__parentPath =
+        idPath: model.__idPath
+        numericPath: model.__numericPath
 
   _treeModelChanged: (model) ->
-    if model.type is 'hole'
-      if not model.__idPath?
-        model.__idPath = [model.id]
-      if not model.__numericPath?
-        # I think this makes sense? If we need to start from a single
-        # element, then the first index can only be 0.
-        model.__numericPath = [0]
+    _.filter model, type: 'hole'
+      .forEach @_calculatePaths
 
-      holeCount = 0
-      model.value.forEach (child) ->
-        if child.type is 'hole'
-          child.__idPath = [model.__idPath..., child.id]
-          child.__numericPath = [model.__numericPath..., holeCount++]
+    getHoleElm = (id) =>
+      _ Polymer.dom(@root).querySelectorAll '.node'
+        .find (elm) -> elm.dataset.holeId is id
+    makeChildInfo = (elm) ->
+      id: elm.dataset?.holeId
+      isFilled: elm.classList.contains 'filled'
+      container: elm
+      node: Polymer.dom(elm).querySelector 'text-tree'
+    # wait for elements to be created
+    @async () =>
+      @holeElements = _.chain model
+        .filter type: 'hole'
+        .map 'id'
+        .map getHoleElm
+        .map makeChildInfo
+        .reduce ((ac, hole) -> _.extend ac, "#{hole.id}": hole), {}
+        .value()
+
+  ## Computed properties helpers ##
+
+  _isEqual: (a, b) -> a is b
+
+  _idOfHole: ({__idPath}) -> _.last __idPath
+
+  _getClassesFromModel: (model, extraClasses...) ->
+    result = if model.classes? then model.classes else []
+    if not _.isArray result
+      result = [result]
+    result.push extraClasses...
+    return result.join ' '

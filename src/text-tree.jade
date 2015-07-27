@@ -6,7 +6,38 @@ dom-module#text-tree
       box-sizing: border-box;
     }
 
+  //-
+    {{for piece in [TreeModel]}}
+      {{if piece is LiteralModel}}
+          span.literal {{text}}
+
+      {{if piece is HoleModel}}
+        {{if !piece.isFilled}}
+          span.node.empty(data-hole-id="{{id}}")
+            span.placeholder {{placeholder}}
+
+        {{if piece.isFilled}}
+          span.node.filled(data-hole-id="{{id}}")
+            text-tree(tree-model="{{piece.value}}")
+
   template
+    template(is="dom-repeat", items="{{treeModel}}", as="piece")
+      template(is="dom-if", if="{{_isEqual(piece.type, 'literal')}}")
+        span.literal {{piece.value}}
+      template(is="dom-if", if="{{_isEqual(piece.type, 'hole')}}")
+        template(is="dom-if", if="{{!piece.isFilled}}")
+          span(class$="{{_getClassesFromModel(piece, 'node', 'empty')}}",
+               data-hole-id$="{{piece.id}}",
+               on-down="_requestFill")
+            span.placeholder {{piece.placeholder}}
+        template(is="dom-if", if="{{piece.isFilled}}")
+          span(class$="{{_getClassesFromModel(piece, 'node', 'filled')}}",
+               data-hole-id$="{{piece.id}}",
+               on-down="_requestFill")
+            text-tree(tree-model="{{piece.value}}")
+
+
+  //- template
     //- I don't think we need this first case, but maybe for a single literal tree? idk
     template(is="dom-if", if="{{_isEqual(treeModel.type, 'literal')}}")
       span(class$="{{_getClassesFromModel(treeModel, 'literal')}}") {{treeModel.value}}
@@ -15,15 +46,17 @@ dom-module#text-tree
       template(is="dom-if", if="{{!treeModel.isFilled}}")
         span(class$="{{_getClassesFromModel(treeModel, 'node', 'empty')}}",
              on-down="_requestFill",
-             hole-id="{{treeModel.id}}") {{treeModel.id}}
+             data-hole-id$="{{treeModel.id}}") {{treeModel.id}}
       template(is="dom-if", if="{{treeModel.isFilled}}")
         span(class$="{{_getClassesFromModel(treeModel, 'node', 'branch')}}",
-             on-down="_requestFill", hole-id="{{item.identifier}}")
+             on-down="_requestFill",
+             data-hole-id$="{{treeModel.id}}")
           template(is="dom-repeat", items="{{treeModel.value}}")
             template(is="dom-if", if="{{_isEqual(item.type, 'literal')}}")
               span.literal {{item.value}}
             template(is="dom-if", if="{{_isEqual(item.type, 'hole')}}")
-              text-tree(tree-model="{{item}}")
+              text-tree(tree-model="{{item}}",
+                        data-hole-id$="{{item.id}}")
               //- span.hole(on-down="_requestFill", hole-id="{{item.identifier}}")
                 text-tree(tree-model="{{item}}")
 

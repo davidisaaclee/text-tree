@@ -122,7 +122,7 @@ window.addEventListener 'WebComponentsReady', () ->
     type: 'branch'
     template: "i'm leaf"
 
-  newTreeFormat =
+  newTreeFormat = [
     type: 'hole'
     id: 'start'
     isFilled: true
@@ -131,7 +131,8 @@ window.addEventListener 'WebComponentsReady', () ->
       value: '(+ '
      ,
       type: 'hole'
-      id: 'randl'
+      id: 'randl::0'
+      placeholder: 'randl'
       isFilled: true
       classes: 'special-node'
       value: [
@@ -140,13 +141,15 @@ window.addEventListener 'WebComponentsReady', () ->
       ]
      ,
       type: 'hole'
-      id: 'randr'
+      id: 'randr::0'
+      placeholder: 'randr'
       isFilled: false
       value: null
      ,
       type: 'literal'
       value: ')'
     ]
+  ]
 
   document
     .querySelector '#tree'
@@ -157,3 +160,8 @@ window.addEventListener 'WebComponentsReady', () ->
     .addEventListener 'requested-fill', (evt) ->
       console.log 'requested-fill', arguments
       console.log evt.detail.tree.select evt.detail.idPath
+
+  # setTimeout () =>
+  #   console.log document.querySelector('#tree')
+  #   console.log document.querySelector('#tree').rootNode()
+  #   console.log document.querySelector('#tree').rootNode().children()
