@@ -112,7 +112,9 @@ TextTree = Polymer
 
   _isTruthy: (x) -> if x then true else false
 
-  _isFilled: ({isFilled}) -> isFilled
+  _isFilled: (piece) ->
+    console.log 'call to _isFilled', piece
+    piece.isFilled
 
   _idOfHole: ({__idPath}) -> _.last __idPath
 
