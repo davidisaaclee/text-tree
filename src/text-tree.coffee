@@ -87,13 +87,16 @@ TextTree = Polymer
         numericPath: model.__numericPath
 
   _treeModelChanged: (model) ->
-    console.log 'begin tree model translation'
     _.filter model, type: 'hole'
       .forEach @_calculatePaths
 
-    getHoleElm = (id) =>
-      _.find (Polymer.dom(@root).querySelectorAll '.node'), (elm) ->
-        elm.dataset.holeId is id
+    getHoleElm = ({id, isFilled}) =>
+      # HACK: sort of; there's something up with dom-if. seems to be creating
+      #       hidden empty elements? which share data-hole-id attributes. so
+      #       we refine the query by specifying filled or empty.
+      selector =
+        "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
+      Polymer.dom(@root).querySelector selector
     makeChildInfo = (elm) ->
       id: elm.dataset?.holeId
       isFilled: elm.classList.contains 'filled'
@@ -103,10 +106,8 @@ TextTree = Polymer
     @async () =>
       @holeElements = _.chain model
         .filter type: 'hole'
-        .map 'id'
-        .reduce ((ac, id) -> ac[id] = getHoleElm id; return ac), {}
+        .reduce ((ac, pc) -> ac[pc.id] = getHoleElm pc; return ac), {}
         .value()
-      console.log 'end tree model translation'
 
   ## Computed properties helpers ##
 
