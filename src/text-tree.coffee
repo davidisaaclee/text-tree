@@ -11,6 +11,7 @@ TextTree = Polymer
     ###
     TreeModel ::= HoleModel
                 | LiteralModel
+                | ActionModel
 
     HoleModel ::=
       type: 'hole'
@@ -22,6 +23,11 @@ TextTree = Polymer
     LiteralModel ::=
       type: 'literal'
       value: String
+
+    ActionModel ::=
+      type: 'action'
+      display: String | HTMLElement
+      onAction: Function
     ###
     treeModel:
       type: Object
@@ -122,3 +128,8 @@ TextTree = Polymer
       result = [result]
     result.push extraClasses...
     return result.join ' '
+
+  # respond to action nodes
+  _actionDown: (event) ->
+    do event.stopPropagation
+    do event.model.piece.onAction
