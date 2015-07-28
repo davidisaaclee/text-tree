@@ -34,41 +34,6 @@ TextTree = Polymer
       endFn: _.identity
       useNumericPath: useNumericPath
 
-  # getNthChild: (index) ->
-  #   branchNode =
-  #     Polymer.dom(this.root).querySelector('.branch')
-  #   holes =
-  #     Polymer.dom(branchNode)
-  #       .childNodes
-  #       .filter (elm) -> elm.classList?.contains 'hole'
-
-  #   # using if-then-else because don't want to return `undefined`
-  #   if holes?
-  #   then holes[index]?.querySelector 'text-tree'
-  #   else null
-
-  # getChild: (id) ->
-  #   console.log 'DEPRECATED: getChild'
-  #   debugger
-    # r = _.find Polymer.dom(@root).querySelectorAll('.hole'), (node) ->
-    #   console.log node, node.dataset.holeId
-    #   node.dataset.holeId is id
-    # ttNode = r.querySelector 'text-tree'
-    # # HACK: from weird markup structre
-    # result =
-    #   if ttNode?
-    #   then ttNode
-    #   else r
-    # console.log 'getChild', id, @, result
-
-  # children: () ->
-  #   _.chain @treeModel.value
-  #     .filter type: 'hole'
-  #     .map 'id'
-  #     .reduce ((acc, id) => _.extend acc, "#{id}": @getChild id), {}
-  #     .value()
-
-
   # TODO: abort fold procedures if child does not exist?
   ###
   path - a path to the desired node
@@ -121,6 +86,7 @@ TextTree = Polymer
         numericPath: model.__numericPath
 
   _treeModelChanged: (model) ->
+    console.log '_treeModelChanged', model, this
     _.filter model, type: 'hole'
       .forEach @_calculatePaths
 
