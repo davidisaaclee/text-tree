@@ -86,7 +86,6 @@ TextTree = Polymer
         numericPath: model.__numericPath
 
   _treeModelChanged: (model) ->
-    console.log '_treeModelChanged', model, this
     _.filter model, type: 'hole'
       .forEach @_calculatePaths
 
@@ -105,6 +104,7 @@ TextTree = Polymer
         .map 'id'
         .reduce ((ac, id) -> ac[id] = getHoleElm id; return ac), {}
         .value()
+      console.log '_treeModelChanged', this, model, @holeElements
 
   ## Computed properties helpers ##
 
