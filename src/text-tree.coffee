@@ -52,6 +52,7 @@ TextTree = Polymer
       else
         [hd, tl...] = path_
         nextChild = current.holeElements[hd]
+        console.log 'walking from', current, 'to', nextChild, 'via', hd, this
 
         # Return `null` if no element at that path.
         if not nextChild?
@@ -104,7 +105,6 @@ TextTree = Polymer
         .map 'id'
         .reduce ((ac, id) -> ac[id] = getHoleElm id; return ac), {}
         .value()
-      console.log '_treeModelChanged', this, model, @holeElements
 
   ## Computed properties helpers ##
 
