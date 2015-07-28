@@ -52,7 +52,6 @@ TextTree = Polymer
       else
         [hd, tl...] = path_
         nextChild = current.holeElements[hd]
-        console.log 'walking from', current, 'to', nextChild, 'via', hd, this
 
         # Return `null` if no element at that path.
         if not nextChild?
@@ -114,10 +113,6 @@ TextTree = Polymer
   _isEqual: (a, b) -> a is b
 
   _isTruthy: (x) -> if x then true else false
-
-  _isFilled: (piece) ->
-    console.log 'call to _isFilled', piece
-    piece.isFilled
 
   _idOfHole: ({__idPath}) -> _.last __idPath
 

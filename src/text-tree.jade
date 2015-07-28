@@ -15,14 +15,12 @@ dom-module#text-tree
         template(is="dom-if", if="{{_isEqual(piece.type, 'literal')}}")
           span.literal {{piece.value}}
         template(is="dom-if", if="{{_isEqual(piece.type, 'hole')}}")
-          //- template(is="dom-if", if="{{!piece.isFilled}}")
-          template(is="dom-if", if="{{!_isFilled(piece)}}")
+          template(is="dom-if", if="{{!piece.isFilled}}")
             text-tree(class$="{{_getClassesFromModel(piece, 'node', 'empty')}}",
                       data-hole-id$="{{piece.id}}",
                       on-down="_requestFill",
                       placeholder="{{piece.placeholder}}")
-          //- template(is="dom-if", if="{{piece.isFilled}}")
-          template(is="dom-if", if="{{_isFilled(piece)}}")
+          template(is="dom-if", if="{{piece.isFilled}}")
             text-tree(class$="{{_getClassesFromModel(piece, 'node', 'filled')}}",
                       data-hole-id$="{{piece.id}}",
                       on-down="_requestFill",
