@@ -16,7 +16,8 @@ dom-module#text-tree
           span.literal {{piece.value}}
         template(is="dom-if", if="{{_isEqual(piece.type, 'action')}}")
           span(class$="{{_getClassesFromModel(piece, 'node', 'action')}}",
-               on-up="_actionDown") {{piece.display}}
+               on-up="_actionDown"
+               on-down="_stopEvent") {{piece.display}}
         template(is="dom-if", if="{{_isEqual(piece.type, 'hole')}}")
           template(is="dom-if", if="{{!piece.isFilled}}")
             text-tree(class$="{{_getClassesFromModel(piece, 'node', 'empty')}}",

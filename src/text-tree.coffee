@@ -133,3 +133,7 @@ TextTree = Polymer
   _actionDown: (event) ->
     do event.stopPropagation
     do event.model.piece.onAction
+
+  _stopEvent: (event) ->
+    do event.preventDefault
+    do event.stopPropagation
