@@ -18,9 +18,9 @@ Polymer
       @unselect.apply @, @selected
 
     selectedElm = this.$.root.walk path,
-      endFn: (node, container, id) ->
-        Polymer.dom(container).classList.add 'selected'
-        return container
+      endFn: (node) ->
+        Polymer.dom(node).classList.add 'selected'
+        return node
       useNumericPath: useNumericPath
 
     if selectedElm? then @selected = arguments
@@ -29,8 +29,8 @@ Polymer
 
   unselect: (path, useNumericPath) ->
     this.$.root.walk path,
-      endFn: (node, container, id) ->
-        Polymer.dom(container).classList.remove 'selected'
+      endFn: (node) ->
+        Polymer.dom(node).classList.remove 'selected'
       useNumericPath: useNumericPath
 
   navigate: (path, useNumericPath) -> this.$.root.navigate path, useNumericPath

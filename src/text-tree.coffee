@@ -26,28 +26,30 @@ TextTree = Polymer
     treeModel:
       type: Object
       observer: '_treeModelChanged'
+      value: null
+    placeholder: String
 
   navigate: (path, useNumericPath) ->
     @walk path,
       endFn: _.identity
       useNumericPath: useNumericPath
 
-  getNthChild: (index) ->
-    branchNode =
-      Polymer.dom(this.root).querySelector('.branch')
-    holes =
-      Polymer.dom(branchNode)
-        .childNodes
-        .filter (elm) -> elm.classList?.contains 'hole'
+  # getNthChild: (index) ->
+  #   branchNode =
+  #     Polymer.dom(this.root).querySelector('.branch')
+  #   holes =
+  #     Polymer.dom(branchNode)
+  #       .childNodes
+  #       .filter (elm) -> elm.classList?.contains 'hole'
 
-    # using if-then-else because don't want to return `undefined`
-    if holes?
-    then holes[index]?.querySelector 'text-tree'
-    else null
+  #   # using if-then-else because don't want to return `undefined`
+  #   if holes?
+  #   then holes[index]?.querySelector 'text-tree'
+  #   else null
 
-  getChild: (id) ->
-    console.log 'DEPRECATED: getChild'
-    debugger
+  # getChild: (id) ->
+  #   console.log 'DEPRECATED: getChild'
+  #   debugger
     # r = _.find Polymer.dom(@root).querySelectorAll('.hole'), (node) ->
     #   console.log node, node.dataset.holeId
     #   node.dataset.holeId is id
@@ -68,29 +70,22 @@ TextTree = Polymer
 
 
   # TODO: abort fold procedures if child does not exist?
+  ###
+  path - a path to the desired node
+  options ::=
+    endFn: (text-tree) -> ()
+    fold:
+      proc:
+      acc:
+  ###
   walk: (path, options) ->
-    start =
-      isFilled: true
-      node: this
-    do helper = (current = start, path_ = path) ->
+    do helper = (current = this, path_ = path) ->
       if path_.length is 0
-        end = if current.isFilled then current.node else current.container
         if options.endFn?
-        then options.endFn current.node, current.container, current.id
+        then options.endFn current
         else end
       else
-        if not current.isFilled
-          # reached a dead end
-          return null
-
-        current = current.node
-
         [hd, tl...] = path_
-
-        # nextChild = do =>
-        #   if options.useNumericPath
-        #   then current.getNthChild hd
-        #   else current.holeElements[hd]
         nextChild = current.holeElements[hd]
 
         # Return `null` if no element at that path.
@@ -130,8 +125,8 @@ TextTree = Polymer
       .forEach @_calculatePaths
 
     getHoleElm = (id) =>
-      _ Polymer.dom(@root).querySelectorAll '.node'
-        .find (elm) -> elm.dataset.holeId is id
+      _.find (Polymer.dom(@root).querySelectorAll '.node'), (elm) ->
+        elm.dataset.holeId is id
     makeChildInfo = (elm) ->
       id: elm.dataset?.holeId
       isFilled: elm.classList.contains 'filled'
@@ -142,14 +137,14 @@ TextTree = Polymer
       @holeElements = _.chain model
         .filter type: 'hole'
         .map 'id'
-        .map getHoleElm
-        .map makeChildInfo
-        .reduce ((ac, hole) -> _.extend ac, "#{hole.id}": hole), {}
+        .reduce ((ac, id) -> ac[id] = getHoleElm id; return ac), {}
         .value()
 
   ## Computed properties helpers ##
 
   _isEqual: (a, b) -> a is b
+
+  _isTruthy: (x) -> if x then true else false
 
   _idOfHole: ({__idPath}) -> _.last __idPath
 
