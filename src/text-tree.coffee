@@ -112,6 +112,8 @@ TextTree = Polymer
 
   _isTruthy: (x) -> if x then true else false
 
+  _isFilled: ({isFilled}) -> isFilled
+
   _idOfHole: ({__idPath}) -> _.last __idPath
 
   _getClassesFromModel: (model, extraClasses...) ->
