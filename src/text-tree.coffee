@@ -50,9 +50,7 @@ TextTree = Polymer
       acc:
   ###
   walk: (path, options) ->
-
     do helper = (current = this, path_ = path) ->
-      console.log 'holeElements', current.holeElements, current
       if path_.length is 0
         if options.endFn?
         then options.endFn current
@@ -103,7 +101,9 @@ TextTree = Polymer
       #       we refine the query by specifying filled or empty.
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
-      Polymer.dom(@root).querySelector selector
+      r = Polymer.dom(@root).querySelector selector
+      console.log 'getHoleElm', r, selector, @root
+      r
     makeChildInfo = (elm) ->
       id: elm.dataset?.holeId
       isFilled: elm.classList.contains 'filled'
