@@ -59,10 +59,6 @@ TextTree = Polymer
         [hd, tl...] = path_
         nextChild = current.holeElements[hd]
 
-        console.dir current
-        console.log "--(#{hd})-->"
-        console.dir nextChild
-
         # Return `null` if no element at that path.
         if not nextChild?
           return null
@@ -101,8 +97,8 @@ TextTree = Polymer
 
     getHoleElm = ({id, isFilled}) =>
       # HACK: sort of; there's something up with dom-if. seems to be creating
-      #       hidden empty elements? which share data-hole-id attributes. so
-      #       we refine the query by specifying filled or empty.
+      #       hidden empty elements? which share data-hole-id attributes.
+      #       so refine the query by specifying `.filled` or `.empty`.
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
       @querySelector selector
@@ -117,6 +113,7 @@ TextTree = Polymer
         .filter type: 'hole'
         .reduce ((ac, pc) -> ac[pc.id] = getHoleElm pc; return ac), {}
         .value()
+      console.log @holeElements, model
 
   ## Computed properties helpers ##
 
