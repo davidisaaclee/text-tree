@@ -101,9 +101,7 @@ TextTree = Polymer
       #       so refine the query by specifying `.filled` or `.empty`.
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
-      r = @querySelector selector
-      console.log r, this
-      r
+      @querySelector selector
     makeChildInfo = (elm) ->
       id: elm.dataset?.holeId
       isFilled: elm.classList.contains 'filled'
@@ -115,8 +113,7 @@ TextTree = Polymer
         .filter type: 'hole'
         .reduce ((ac, pc) -> ac[pc.id] = getHoleElm pc; return ac), {}
         .value()
-      console.log @holeElements, model
-    @async makeHoleElementDict, 100
+    @async makeHoleElementDict
 
   ## Computed properties helpers ##
 
