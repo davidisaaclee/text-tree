@@ -102,7 +102,7 @@ TextTree = Polymer
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
       r = Polymer.dom(@root).querySelector selector
-      console.log 'getHoleElm', r, selector, @root
+      console.log 'getHoleElm', r, selector, Polymer.dom(@root).children
       r
     makeChildInfo = (elm) ->
       id: elm.dataset?.holeId
