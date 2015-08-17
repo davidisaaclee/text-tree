@@ -99,6 +99,9 @@ TextTree = Polymer
       # HACK: sort of; there's something up with dom-if. seems to be creating
       #       hidden empty elements? which share data-hole-id attributes. so
       #       we refine the query by specifying filled or empty.
+
+      console.log @querySelectorAll '[data-hole-id]'
+
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
       # r = Polymer.dom(@root).querySelector selector
