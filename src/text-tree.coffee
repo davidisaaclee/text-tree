@@ -113,7 +113,10 @@ TextTree = Polymer
         .filter type: 'hole'
         .reduce ((ac, pc) -> ac[pc.id] = getHoleElm pc; return ac), {}
         .value()
-    @async makeHoleElementDict
+
+    # HACK: idk why the elements are now taking so long to load...
+    #       (this should be to just have microtask timing...)
+    @async makeHoleElementDict, 10
 
   ## Computed properties helpers ##
 
