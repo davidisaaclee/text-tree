@@ -101,6 +101,7 @@ TextTree = Polymer
       #       we refine the query by specifying filled or empty.
 
       console.log @querySelectorAll '[data-hole-id]'
+      console.log document.querySelectorAll '[data-hole-id]'
 
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
