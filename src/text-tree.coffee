@@ -99,6 +99,7 @@ TextTree = Polymer
       # HACK: sort of; there's something up with dom-if. seems to be creating
       #       hidden empty elements? which share data-hole-id attributes.
       #       so refine the query by specifying `.filled` or `.empty`.
+      debugger
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
       r = @querySelector selector
