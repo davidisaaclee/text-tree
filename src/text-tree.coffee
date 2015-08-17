@@ -101,7 +101,9 @@ TextTree = Polymer
       #       so refine the query by specifying `.filled` or `.empty`.
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
-      @querySelector selector
+      r = @querySelector selector
+      console.log r, this
+      r
     makeChildInfo = (elm) ->
       id: elm.dataset?.holeId
       isFilled: elm.classList.contains 'filled'
