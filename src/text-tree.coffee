@@ -50,7 +50,9 @@ TextTree = Polymer
       acc:
   ###
   walk: (path, options) ->
+
     do helper = (current = this, path_ = path) ->
+      console.log 'holeElements', current.holeElements, current
       if path_.length is 0
         if options.endFn?
         then options.endFn current
