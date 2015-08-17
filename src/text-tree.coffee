@@ -59,7 +59,7 @@ TextTree = Polymer
         [hd, tl...] = path_
         nextChild = current.holeElements[hd]
 
-        console.dir current, "--(#{hd})-->", nextChild, 
+        console.dir current, "--(#{hd})-->", nextChild
 
         # Return `null` if no element at that path.
         if not nextChild?
