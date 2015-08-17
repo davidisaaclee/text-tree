@@ -99,7 +99,6 @@ TextTree = Polymer
       # HACK: sort of; there's something up with dom-if. seems to be creating
       #       hidden empty elements? which share data-hole-id attributes.
       #       so refine the query by specifying `.filled` or `.empty`.
-      debugger
       selector =
         "[data-hole-id=\"#{id}\"].#{if isFilled then 'filled' else 'empty'}"
       r = @querySelector selector
@@ -111,12 +110,13 @@ TextTree = Polymer
       container: elm
       node: Polymer.dom(elm).querySelector 'text-tree'
     # wait for elements to be created
-    @async () =>
+    makeHoleElementDict = () =>
       @holeElements = _.chain model
         .filter type: 'hole'
         .reduce ((ac, pc) -> ac[pc.id] = getHoleElm pc; return ac), {}
         .value()
       console.log @holeElements, model
+    @async makeHoleElementDict, 100
 
   ## Computed properties helpers ##
 
